@@ -7,12 +7,26 @@ import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
   const {data: session, status } = useSession();
-  console.log(status, 'session');
+  console.log(session, 'session');
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <main>
         <h1>Gustbook</h1>
-        <button onClick={() => signIn("discord")}>Sign in With Discord</button>
+        <div>
+          {session ? (
+            <>
+              <p>Signed in as {session.user?.name}</p>
+              <button onClick={() => signOut()}>Sign out</button>
+            </>
+          ) : (
+            <button onClick={() => signIn('discord')}>Sign in With Discord</button>
+          )}
+        </div>
       </main>
     </>
   );
